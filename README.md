@@ -18,16 +18,6 @@ isolated E2e test cases were implemented, run using command:
 
 --------------
 
-# Quests take as much as you like:
-- change port served to 8000
-- create an endpoint which gives you the bill for a specific organisation
-- implement an approach do different currency's
-- provide an approach to implement to Inclusive volume (each Org has an inclusive volume when it exceeds it is charged as before)
-
-
-![](./erDiagram.svg)
-_____________________________
-
 ## Assumptions:  
 - Each cdr price has to be calculated right away as the price may change in the rate entity, and the client has to pay for the current price.
 - Cdrs come in big numbers and high rate, and new code could be added in the future when creating new cdr
