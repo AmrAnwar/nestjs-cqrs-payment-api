@@ -16,6 +16,14 @@ services:
       - 3000:3000
     depends_on:
        - mariadb
+  testdb:
+    image: mariadb:latest
+    restart: 'no'
+    environment:
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
+      MARIADB_DATABASE: testdb
+    ports:
+      - 15005:3306
   mariadb:
     image: mariadb:latest
     restart: 'no'
