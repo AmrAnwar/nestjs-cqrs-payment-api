@@ -1,7 +1,25 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { OrganisationEntity } from './entitys/organisation.entity';
+import {
+  SimEntity,
+  OrganisationEntity,
+  RateEntity,
+  RateZoneEntity,
+  CdrEntity,
+  InclusiveVolumeEntity,
+  PaymentEntity,
+  CurrencyExchangeEntity,
+} from './entitys';
 
-export const entities = [OrganisationEntity];
+export const entities = [
+  OrganisationEntity,
+  SimEntity,
+  RateEntity,
+  RateZoneEntity,
+  CdrEntity,
+  InclusiveVolumeEntity,
+  PaymentEntity,
+  CurrencyExchangeEntity,
+];
 
 export const dbConfigFactory: () => Promise<TypeOrmModuleOptions> =
   async () => ({
@@ -12,5 +30,5 @@ export const dbConfigFactory: () => Promise<TypeOrmModuleOptions> =
     password: process.env.MARIADB_ROOT_PASSWORD,
     database: 'emnify',
     entities,
-    synchronize: false,
+    synchronize: true,
   });
