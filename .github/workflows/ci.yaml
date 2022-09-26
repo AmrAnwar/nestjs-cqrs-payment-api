@@ -15,7 +15,7 @@ jobs:
           node-version: '16.x'
       
       - name: Cache node modules
-        id: cache-npm
+        id: cache-npm-modules
         uses: actions/cache@v3
         env:
           cache-name: cache-node-modules
@@ -47,12 +47,15 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Cache node modules
-        id: cache-npm
+        id: cache-npm-modules
         uses: actions/cache@v3
         env:
           cache-name: cache-node-modules
         with:
-          path: ~/.npm
+          path: |
+            ~/.npm
+            **/node_modules
+            **/app/node_modules
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
