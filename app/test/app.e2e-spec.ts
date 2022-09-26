@@ -45,6 +45,19 @@ beforeAll(async () => {
   await app.init();
 });
 
+afterEach(async () => {
+  for (const entity of entities) {
+    const repository = app.get(
+      `${entity.name}Repository`,
+    ) as Repository<unknown>;
+    await repository.query(`DELETE from ${repository.metadata.tableName};`);
+  }
+});
+
+afterAll(async () => {
+  app.close();
+});
+
 describe('App Endpoints e2e', () => {
   let sim: SimEntity;
   let rateZone: RateZoneEntity;
@@ -191,13 +204,4 @@ describe('App Endpoints e2e', () => {
       timestamp: expect.any(String),
     });
   });
-});
-
-afterEach(async () => {
-  for (const entity of entities) {
-    const repository = app.get(
-      `${entity.name}Repository`,
-    ) as Repository<unknown>;
-    await repository.query(`DELETE from ${repository.metadata.tableName};`);
-  }
 });

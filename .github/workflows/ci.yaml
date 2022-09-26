@@ -1,0 +1,73 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+      
+      - name: Cache node modules
+        id: cache-npm-modules
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: |
+            ~/.npm
+            **/node_modules
+            **/app/node_modules
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build1-${{ env.cache-name }}-
+      - if: ${{ steps.cache-npm.outputs.cache-hit == 'true' }}
+        name: List the state of node modules
+        continue-on-error: true
+        working-directory: ./app
+        run: npm list
+      - name: Install Packages
+        if: ${{ steps.cache-npm.outputs.cache-hit != 'true' }}
+        working-directory: ./app
+        run: npm install
+      - name: Build app
+        working-directory: ./app
+        run: npm run build --if-present
+
+
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Cache node modules
+        id: cache-npm-modules
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: |
+            ~/.npm
+            **/node_modules
+            **/app/node_modules
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build1-${{ env.cache-name }}-
+      - name: Build the stack
+        run: docker-compose up -d testdb
+      - name: Run E2E test
+        working-directory: ./app
+        run: npm run test:e2e --ci --reporters=default --reporters=jest-junit
+      - name: Test Report
+        uses: dorny/test-reporter@v1
+        if: success() || failure()
+        with:
+          name: JEST Tests Report
+          path: app/reports/*.xml
+          reporter: jest-junit

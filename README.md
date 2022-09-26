@@ -1,6 +1,8 @@
 # Billing API Pay As You Go / Inclusive Volume
 Billing API for SIM calls. 
 
+[![CI](https://github.com/AmrAnwar/nestjs-cqrs-payment-api/actions/workflows/ci.yaml/badge.svg)](https://github.com/AmrAnwar/nestjs-cqrs-payment-api/actions/workflows/ci.yaml)
+
 # To Start:
 - install docker
 - `docker-compose up` 
