@@ -31,7 +31,6 @@ jobs:
         continue-on-error: true
         run: npm list
       - name: Install Packages
-        if: ${{ steps.cache-npm.outputs.cache-hit != 'true' }}
         working-directory: ./app
         run: npm ci
       - name: Build app
