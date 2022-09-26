@@ -23,4 +23,11 @@ jobs:
         run: npm run build --if-present
       - name: Run E2E test
         working-directory: ./app
-        run: npm run test:e2e
+        run: npm run test:e2e --ci --reporters=default --reporters=jest-junit
+      - name: Test Report
+        uses: dorny/test-reporter@v1
+        if: success() || failure()
+        with:
+          name: JEST Tests Report
+          path: app/reports/*.xml
+          reporter: jest-junit
