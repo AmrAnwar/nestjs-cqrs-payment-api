@@ -21,6 +21,7 @@ jobs:
           cache-name: cache-node-modules
         with:
           path: ~/.npm
+          context:  ./app
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
@@ -29,11 +30,12 @@ jobs:
       - if: ${{ steps.cache-npm.outputs.cache-hit == 'true' }}
         name: List the state of node modules
         continue-on-error: true
+        working-directory: ./app
         run: npm list
       - name: Install Packages
         if: ${{ steps.cache-npm.outputs.cache-hit != 'true' }}
         working-directory: ./app
-        run: npm ci
+        run: npm install
       - name: Build app
         working-directory: ./app
         run: npm run build --if-present
