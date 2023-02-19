@@ -5,7 +5,7 @@ Billing API for SIM calls.
 
 # To Start:
 - install docker
-- `docker-compose up` 
+- `docker-compose up`  
 
 # CQRS
 By using the event sourcing design pattern when a new call detail(Cdr) comes, new event is triggered, The saga catches this event and then trigger a command to do payment.
